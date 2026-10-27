@@ -1,0 +1,737 @@
+<!doctype html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Can Ersoy</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Can Ersoy – Berlin based Art Director & Brand Designer.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;500;600;700;800&display=swap">
+<style>
+/* Layout: Figma design by Can Ersoy. Black bars top/bottom, 3×2 image grid on home, grey project pages. Single fixed look (no dark mode). */
+:root {
+  --black: #000000;
+  --white: #ffffff;
+  --orange: #ff7419;
+  --cyan: #14c8f0;
+  --grey: #d9d9d9;
+  --muted: #666666;
+  --rule: #dedede;
+  --ink: #000000;
+  --font: "Urbanist", "Gilroy", "Helvetica Neue", Arial, sans-serif;
+  --bar: 50px;
+  --gutter-l: max(16px, env(safe-area-inset-left, 0px));
+  --gutter-r: max(16px, env(safe-area-inset-right, 0px));
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html[data-lang="en"] [data-l="de"], html[data-lang="de"] [data-l="en"] { display: none !important; }
+body { margin: 0; background: var(--white); color: var(--ink); font-family: var(--font); font-size: 17px; line-height: 1.45; -webkit-font-smoothing: antialiased; }
+img { display: block; max-width: 100%; height: auto; }
+a { color: inherit; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+
+/* ---------- Bars ---------- */
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--black); }
+.topbar {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--black); color: var(--white);
+  height: var(--bar); display: flex; align-items: center; justify-content: space-between;
+  padding-left: max(30px, env(safe-area-inset-left, 0px)); padding-right: max(28px, env(safe-area-inset-right, 0px));
+}
+.logo { color: var(--orange); font-weight: 700; font-size: 28px; letter-spacing: -.01em; text-decoration: none; line-height: 1; }
+.lang { font-size: 18px; font-weight: 400; text-decoration: none; }
+.lang:hover, .bottomnav a:hover { color: var(--orange); }
+.menu-btn { display: none; font-size: 18px; }
+
+.bottomnav {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; background: var(--black); color: var(--white);
+  min-height: var(--bar); display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding-left: max(30px, env(safe-area-inset-left, 0px)); padding-right: max(30px, env(safe-area-inset-right, 0px));
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+.bottomnav a { text-decoration: none; font-size: 18px; font-weight: 400; }
+.bottomnav a[aria-current="page"] { color: var(--orange); }
+body:not([data-view="home"]) .bottomnav .nav-lang { display: none; }
+main { padding-bottom: calc(var(--bar) + env(safe-area-inset-bottom, 0px)); }
+body[data-view="home"] .topbar { display: none; }
+
+/* ---------- Home grid ---------- */
+.home-grid {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-rows: repeat(2, minmax(0, 1fr));
+  height: calc(100vh - var(--bar) - env(safe-area-inset-bottom, 0px) - env(safe-area-inset-top, 0px));
+  height: calc(100dvh - var(--bar) - env(safe-area-inset-bottom, 0px) - env(safe-area-inset-top, 0px));
+  min-height: 560px;
+}
+.tile { position: relative; overflow: hidden; display: block; text-decoration: none; color: var(--white); min-width: 0; }
+.tile img { width: 100%; height: 100%; object-fit: cover; transition: transform .7s cubic-bezier(.2,.7,.2,1); }
+.tile-name { background: var(--black); display: flex; flex-direction: column; justify-content: flex-end;
+  padding: clamp(14px, 1.8vw, 26px); padding-left: max(clamp(14px, 1.8vw, 26px), env(safe-area-inset-left, 0px)); }
+.tile-name h1 { margin: 0; color: var(--orange); font-weight: 600; font-size: clamp(64px, 9.6vw, 190px); line-height: .82; letter-spacing: -.03em; }
+.tile-name p { margin: clamp(10px, 1.2vw, 18px) 0 0 4px; color: var(--white); font-weight: 300; font-size: clamp(15px, 1.25vw, 22px); line-height: 1.3; }
+.tile-new { background: var(--cyan); }
+.tile-new img { mix-blend-mode: multiply; }
+.tile-portrait img { object-position: 50% 22%; }
+
+/* project name on hover */
+.tag {
+  position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; gap: 4px;
+  padding: clamp(16px, 2vw, 28px); background: linear-gradient(to top, rgba(0,0,0,.72), rgba(0,0,0,.25) 55%, rgba(0,0,0,0));
+  opacity: 0; transition: opacity .35s ease; pointer-events: none;
+}
+.tag strong { font-weight: 600; font-size: clamp(24px, 2.4vw, 44px); line-height: 1.02; letter-spacing: -.01em; transform: translateY(10px); transition: transform .45s cubic-bezier(.2,.7,.2,1); }
+.tag span { font-weight: 300; font-size: clamp(14px, 1.1vw, 18px); transform: translateY(10px); transition: transform .45s .04s cubic-bezier(.2,.7,.2,1); }
+@media (hover: hover) {
+  .tile:hover .tag, .tile:focus-visible .tag, .card:hover .tag, .card:focus-visible .tag { opacity: 1; }
+  .tile:hover .tag strong, .tile:hover .tag span, .tile:focus-visible .tag strong, .tile:focus-visible .tag span,
+  .card:hover .tag strong, .card:hover .tag span { transform: none; }
+  .tile:hover img, .card:hover img { transform: scale(1.03); }
+}
+@media (hover: none) { .tile .tag { opacity: 1; } .tile .tag strong, .tile .tag span { transform: none; } }
+
+/* ---------- Works ---------- */
+.works { max-width: 1140px; margin: 0 auto; padding-block: 48px 40px;
+  padding-left: max(24px, env(safe-area-inset-left, 0px)); padding-right: max(24px, env(safe-area-inset-right, 0px));
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px 14px; }
+.card { display: block; text-decoration: none; color: var(--ink); min-width: 0; }
+.card .frame { position: relative; overflow: hidden; aspect-ratio: 563 / 373; background: var(--grey); color: var(--white); }
+.card img { width: 100%; height: 100%; object-fit: cover; transition: transform .7s cubic-bezier(.2,.7,.2,1); }
+.card p { margin: 14px 0 0; font-weight: 300; font-size: clamp(19px, 1.9vw, 26px); line-height: 1.22; }
+.card .soon { font-size: 14px; font-weight: 500; color: var(--orange); margin-top: 4px; }
+div.card { cursor: default; }
+
+/* ---------- About ---------- */
+.wrap { max-width: 1320px; margin-inline: auto;
+  padding-left: max(24px, env(safe-area-inset-left, 0px)); padding-right: max(24px, env(safe-area-inset-right, 0px)); }
+.label { font-size: 13px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.about-head { padding-block: clamp(32px, 5vw, 64px) clamp(24px, 3vw, 40px); }
+.about-head h1 { margin: 14px 0 0; font-weight: 700; font-size: clamp(3rem, 7vw, 6.2rem); line-height: .95; letter-spacing: -.035em; text-wrap: balance; }
+.about-head h1 em, .about-intro em { font-style: normal; color: var(--orange); }
+.say { display: inline-block; font-size: clamp(16px, .26em, 24px); font-weight: 400; letter-spacing: 0; color: var(--muted); white-space: nowrap; vertical-align: .55em; }
+.about-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 24px 32px; padding-bottom: 72px; align-items: start; }
+.about-grid > * { min-width: 0; }
+.about-intro { grid-column: 1 / span 7; margin: 0; font-weight: 600; font-size: clamp(1.3rem, 2.2vw, 1.75rem); line-height: 1.3; letter-spacing: -.01em; text-wrap: balance; }
+.about-photo { grid-column: 9 / span 4; grid-row: 1 / span 2; margin: 0; }
+.about-photo img { width: 100%; aspect-ratio: 448 / 600; object-fit: cover; background: var(--grey); }
+.about-body { grid-column: 1 / span 7; }
+.about-body p { margin: 0 0 .9em; max-width: 62ch; }
+.about-body h2, .cv h2 { color: var(--orange); font-weight: 600; font-size: 18px; margin: 28px 0 8px; }
+.cv { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 32px 40px;
+  border-top: 2px solid var(--black); padding-top: 18px; margin-top: 24px; }
+.cv > div { min-width: 0; }
+.cv h2 { margin-top: 0; margin-bottom: 16px; }
+.cv ol, .cv ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 16px; }
+.cv li { display: grid; gap: 2px; }
+.cv strong { font-weight: 600; }
+.cv .when { font-size: 14px; color: var(--muted); font-variant-numeric: tabular-nums; }
+@media (max-width: 860px) {
+  .about-intro, .about-body { grid-column: 1 / -1; }
+  .about-photo { grid-column: 1 / -1; grid-row: auto; max-width: 380px; }
+}
+
+/* ---------- Contact ---------- */
+.contact { min-height: calc(100vh - 2 * var(--bar)); min-height: calc(100dvh - 2 * var(--bar) - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: clamp(48px, 10vh, 120px);
+  padding-block: 48px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); text-align: center; }
+.contact h1 { margin: 0; font-weight: 300; font-size: clamp(30px, 3.6vw, 48px); line-height: 1.22; text-wrap: balance; }
+.links { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; text-align: left; }
+.links li { display: grid; grid-template-columns: 32px auto; gap: 18px; align-items: center; min-width: 0; }
+.links svg { width: 30px; height: 30px; }
+.links a, .links .mail { font-weight: 600; font-size: clamp(17px, 1.6vw, 22px); text-underline-offset: 4px; overflow-wrap: anywhere; }
+.links .mail { text-decoration: none; user-select: all; }
+.copy { font-size: 13px; font-weight: 500; border: 1px solid currentColor; border-radius: 99px; padding: 3px 10px; margin-left: 10px; vertical-align: 2px; }
+.copy:hover { color: var(--orange); }
+
+/* ---------- Project pages ---------- */
+.p-head { padding-block: clamp(32px, 5vw, 64px) clamp(24px, 3vw, 40px); }
+.back { font-size: 15px; font-weight: 500; text-decoration: none; color: var(--muted); }
+.back:hover { color: var(--orange); }
+.p-head h1 { margin: 16px 0 0; font-weight: 700; font-size: clamp(2.6rem, 6.6vw, 5.8rem); line-height: .97; letter-spacing: -.035em; text-wrap: balance; }
+.p-head .sub { margin: 14px 0 0; font-weight: 300; font-size: clamp(1.15rem, 1.7vw, 1.45rem); max-width: 46ch; }
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px 32px;
+  border-top: 2px solid var(--black); margin: 32px 0 0; padding-top: 16px; }
+.facts > div { min-width: 0; }
+.facts dd { margin: 6px 0 0; font-size: 17px; }
+
+.full { margin: 0 0 clamp(14px, 1.6vw, 20px); }
+.full img, .grid2 img, .split img { width: 100%; }
+.text-block { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 24px; padding-block: clamp(40px, 6vw, 80px); }
+.text-block > * { min-width: 0; }
+.text-block .k { grid-column: 1 / span 3; }
+.text-block .v { grid-column: 5 / span 7; }
+.text-block h3 { margin: 0; color: var(--orange); font-weight: 600; font-size: 18px; }
+.text-block p { margin: 0 0 1em; max-width: 62ch; }
+.text-block p.lead { font-weight: 600; font-size: clamp(1.3rem, 2.1vw, 1.75rem); line-height: 1.3; letter-spacing: -.01em; }
+@media (max-width: 820px) { .text-block { gap: 10px; } .text-block .k, .text-block .v { grid-column: 1 / -1; } }
+
+.cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 32px; padding-block: clamp(32px, 5vw, 56px); border-top: 1px solid var(--rule); }
+.cols > div { min-width: 0; }
+.cols h3 { margin: 0 0 8px; color: var(--orange); font-weight: 600; font-size: 18px; }
+.cols p { margin: 0 0 .8em; }
+
+.grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(14px, 1.6vw, 20px); margin-bottom: clamp(14px, 1.6vw, 20px); }
+.grid2 > * { min-width: 0; }
+@media (max-width: 700px) { .grid2 { grid-template-columns: 1fr; } }
+.split { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(20px, 3vw, 48px); align-items: center; margin-block: clamp(14px, 1.6vw, 20px); }
+.split > * { min-width: 0; }
+.split .brief { font-weight: 600; font-size: clamp(1.25rem, 1.9vw, 1.6rem); line-height: 1.3; letter-spacing: -.01em; margin: .5em 0 .7em; max-width: 30ch; }
+.split .brief + p { color: var(--muted); max-width: 44ch; margin: 0; }
+@media (max-width: 820px) { .split { grid-template-columns: 1fr; } }
+figure { margin: 0; }
+figcaption { margin-top: 8px; font-size: 13px; color: var(--muted); }
+
+.slogan { padding-block: clamp(48px, 7vw, 96px); margin-block: clamp(14px, 1.6vw, 20px); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+.slogan q { display: block; quotes: none; font-weight: 800; font-size: clamp(2.1rem, 5.6vw, 4.8rem); line-height: 1; letter-spacing: -.035em; text-wrap: balance; }
+.slogan q span { color: var(--orange); }
+.slogan p { margin: 16px 0 0; font-weight: 300; font-size: 1.2rem; color: var(--muted); }
+
+.swatches { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; padding-bottom: clamp(32px, 4vw, 56px); }
+.swatch { min-width: 0; }
+.swatch i { display: block; aspect-ratio: 4 / 3; border: 1px solid var(--rule); }
+.swatch b { display: block; margin-top: 8px; font-weight: 600; font-size: 15px; }
+.swatch small { display: block; font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+@media (max-width: 560px) { .swatches { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+.next { display: flex; justify-content: space-between; align-items: end; gap: 16px; text-decoration: none;
+  border-top: 2px solid var(--black); margin-top: clamp(40px, 6vw, 80px); padding-block: 40px 72px; }
+.next strong { display: block; margin-top: 8px; font-weight: 700; font-size: clamp(1.9rem, 4.6vw, 3.8rem); line-height: 1; letter-spacing: -.03em; }
+.next .arrow { color: var(--orange); font-size: clamp(1.9rem, 4.6vw, 3.8rem); line-height: 1; transition: transform .3s ease; }
+.next:hover strong { color: var(--orange); }
+.next:hover .arrow { transform: translateX(8px); }
+.zoom { cursor: zoom-in; }
+
+/* Lightbox */
+.lb { position: fixed; inset: 0; z-index: 50; background: rgba(0,0,0,.92); display: grid; place-items: center; cursor: zoom-out;
+  padding: max(16px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(16px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); }
+.lb img { max-height: 90vh; width: auto; max-width: 100%; }
+.lb button { position: absolute; top: calc(14px + env(safe-area-inset-top, 0px)); right: calc(18px + env(safe-area-inset-right, 0px)); color: var(--white); font-size: 18px; font-weight: 300; }
+
+/* Mobile menu */
+.menu { position: fixed; inset: 0; z-index: 40; background: var(--black); color: var(--white); overflow-y: auto; display: flex; flex-direction: column;
+  padding: calc(28px + env(safe-area-inset-top, 0px)) max(26px, env(safe-area-inset-right, 0px)) calc(28px + env(safe-area-inset-bottom, 0px)) max(26px, env(safe-area-inset-left, 0px)); }
+.menu nav { display: grid; gap: 14px; }
+.menu nav a { font-size: 44px; font-weight: 400; line-height: 1.2; text-decoration: none; }
+.menu nav a:hover { color: var(--orange); }
+.menu-close { align-self: flex-end; font-size: 30px; font-weight: 200; margin-top: 28px; }
+.menu-name { margin-top: 36px; }
+.menu-name strong { display: block; color: var(--orange); font-weight: 600; font-size: 116px; line-height: .86; letter-spacing: -.03em; }
+.menu-name span { display: block; margin-top: 22px; font-weight: 300; font-size: 24px; line-height: 1.25; }
+
+/* ---------- Tablet ---------- */
+@media (max-width: 1024px) {
+  .home-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: none; grid-auto-rows: auto; height: auto; min-height: 0; }
+  .tile { aspect-ratio: 436 / 482; }
+  .tile-name h1 { font-size: clamp(64px, 16vw, 150px); }
+  .tile-name p { font-size: clamp(16px, 2.6vw, 24px); max-width: 14em; }
+  .tile-portrait { order: 6; }
+}
+
+/* ---------- Phone ---------- */
+@media (max-width: 640px) {
+  body[data-view="home"] .topbar { display: flex; }
+  .topbar { padding-left: max(18px, env(safe-area-inset-left, 0px)); padding-right: max(18px, env(safe-area-inset-right, 0px)); }
+  .topbar .lang { display: none; }
+  .menu-btn { display: block; }
+  .bottomnav { display: none; }
+  main { padding-bottom: env(safe-area-inset-bottom, 0px); }
+  .home-grid { grid-template-columns: 1fr; }
+  .tile { aspect-ratio: 4 / 3.4; }
+  .tile-name { aspect-ratio: auto; padding: 36px 24px 40px; }
+  .tile-name h1 { font-size: clamp(88px, 30vw, 130px); }
+  .tile-name p { font-size: 22px; margin-left: 6px; }
+  .tile-portrait { aspect-ratio: 4 / 5; }
+  .works { grid-template-columns: 1fr; padding-top: 24px; gap: 28px; }
+  .wrap { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  .contact { justify-content: flex-start; padding-top: 72px; min-height: 0; }
+  .links li { grid-template-columns: 26px auto; gap: 12px; }
+  .links svg { width: 24px; height: 24px; }
+  .copy { margin: 6px 0 0; display: inline-block; }
+  .menu nav a { font-size: 38px; }
+  .menu-name strong { font-size: clamp(80px, 27vw, 116px); }
+}
+</style>
+</head>
+<body data-view="home">
+
+
+
+<header class="topbar">
+  <a class="logo" href="#" data-route="home">Can Ersoy</a>
+  <a class="lang" href="#" data-toggle-lang><span data-l="en">DE</span><span data-l="de">EN</span></a>
+  <button class="menu-btn" type="button" id="menu-open" aria-controls="menu" aria-expanded="false"><span data-l="en">Menu</span><span data-l="de">Menü</span></button>
+</header>
+
+<main>
+  <!-- ============ HOME ============ -->
+  <section data-view="home" class="home-grid" aria-label="Home">
+    <div class="tile tile-name">
+      <h1>Can<br>Ersoy</h1>
+      <p><span data-l="en">Berlin based Art director <br>&amp; Brand designer</span><span data-l="de">Art Director &amp; Brand Designer <br>aus Berlin</span></p>
+    </div>
+    <a class="tile tile-new" href="#lines-of-arrival">
+      <img src="images/booklet-mockup-quote.jpg" alt="Lines of Arrival booklet, open spread" width="1600" height="900">
+      <span class="tag"><strong>Lines of Arrival</strong><span data-l="en">Editorial, photography booklet</span><span data-l="de">Editorial, Fotobuch</span></span>
+    </a>
+    <div class="tile tile-portrait">
+      <img src="images/portrait.jpg" alt="Portrait of Can Ersoy" width="448" height="600">
+    </div>
+    <a class="tile" href="#purenest">
+      <img src="images/home-purenest.jpg" alt="Purenest website on a laptop" width="1600" height="900">
+      <span class="tag"><strong>Purenest</strong><span data-l="en">Branding, E-commerce system</span><span data-l="de">Branding, E-Commerce-System</span></span>
+    </a>
+    <div class="tile" tabindex="0">
+      <img src="images/home-erkosan.jpg" alt="Erkosan Kalıp website hero image" width="1406" height="798">
+      <span class="tag"><strong>Erkosan Kalıp</strong><span data-l="en">Branding, WordPress website · coming soon</span><span data-l="de">Branding, WordPress-Website · demnächst</span></span>
+    </div>
+    <a class="tile" href="#herceptin">
+      <img src="images/home-herceptin.jpg" alt="Herceptin campaign posters on a street facade" width="1600" height="900">
+      <span class="tag"><strong>Herceptin</strong><span data-l="en">Social Awareness Campaign</span><span data-l="de">Social-Awareness-Kampagne</span></span>
+    </a>
+  </section>
+
+  <!-- ============ WORKS ============ -->
+  <section data-view="works" hidden>
+    <div class="works">
+      <div class="card" tabindex="0">
+        <div class="frame">
+          <img src="images/home-erkosan.jpg" alt="Erkosan Kalıp website hero image" loading="lazy" width="1406" height="798">
+          <span class="tag"><strong>Erkosan Kalıp</strong></span>
+        </div>
+        <p><span data-l="en">Branding, Wordpress website,<br>independent project, 2026</span><span data-l="de">Branding, WordPress-Website,<br>unabhängiges Projekt, 2026</span></p>
+        <p class="soon"><span data-l="en">Case study coming soon</span><span data-l="de">Projektseite folgt</span></p>
+      </div>
+      <a class="card" href="#herceptin">
+        <div class="frame">
+          <img src="images/home-herceptin.jpg" alt="Herceptin campaign posters on a street facade" loading="lazy" width="1600" height="900">
+          <span class="tag"><strong>Herceptin</strong></span>
+        </div>
+        <p><span data-l="en">Social Awareness Campaign,<br>FCB Health Reaktor, 2023</span><span data-l="de">Social-Awareness-Kampagne,<br>FCB Health Reaktor, 2023</span></p>
+      </a>
+      <a class="card" href="#purenest">
+        <div class="frame">
+          <img src="images/home-purenest.jpg" alt="Purenest website on a laptop" loading="lazy" width="1600" height="900">
+          <span class="tag"><strong>Purenest</strong></span>
+        </div>
+        <p><span data-l="en">Branding, E-commerce system,<br>freelance, 2024</span><span data-l="de">Branding, E-Commerce-System,<br>Freelance, 2024</span></p>
+      </a>
+      <a class="card" href="#lines-of-arrival">
+        <div class="frame">
+          <img src="images/booklet-mockup-quote.jpg" alt="Lines of Arrival booklet, open spread" loading="lazy" width="1600" height="900">
+          <span class="tag"><strong>Lines of Arrival</strong></span>
+        </div>
+        <p><span data-l="en">Editorial, photography booklet,<br>Hochschule Anhalt, 2024</span><span data-l="de">Editorial, Fotobuch,<br>Hochschule Anhalt, 2024</span></p>
+      </a>
+    </div>
+  </section>
+
+  <!-- ============ ABOUT ============ -->
+  <section data-view="about" hidden>
+    <div class="wrap">
+      <div class="about-head">
+        <span class="label"><span data-l="en">About</span><span data-l="de">Über mich</span></span>
+        <h1><span data-l="en">Hi, I’m <em>Can</em>! <span class="say">(pronounced “Jahn”)</span></span><span data-l="de">Hallo, ich bin <em>Can</em>! <span class="say">(gesprochen „Dschan“)</span></span></h1>
+      </div>
+      <div class="about-grid">
+        <p class="about-intro">
+          <span data-l="en">I’m an <em>Art Director</em> and <em>Brand Designer</em> who brings strategic storytelling and bold visual execution together.</span>
+          <span data-l="de" lang="de">Ich bin <em>Art Director</em> und <em>Brand Designer</em> und verbinde strategisches Storytelling mit mutiger visueller Umsetzung.</span>
+        </p>
+        <figure class="about-photo"><img src="images/portrait.jpg" alt="Portrait of Can Ersoy" width="448" height="600"></figure>
+        <div class="about-body">
+          <div data-l="en">
+            <p>Design has driven me since my first day at university. What I enjoy most is turning complex messages into simple, high-impact visual ideas.</p>
+            <p>I started my career at FCB Health Reaktor (IPG Group) in Istanbul and moved from Graphic Designer to Junior Art Director within a year. Working on global accounts such as Pfizer, Roche and Bayer taught me how to deliver 360° campaigns that look good and meet their KPIs. My mentors described me as the fastest learner they had worked with: someone who stays calm and delivers under pressure.</p>
+            <h2>From Istanbul to Berlin</h2>
+            <p>In 2023 I moved to Germany for a Master’s in Integrated Design at Hochschule Anhalt, to grow my craft into a more holistic, interdisciplinary approach. Today I live in Berlin and work in German at C1 level.</p>
+            <h2>Why work with me?</h2>
+            <p>You get a fast learner with the reliability of an agency-trained art director, and a sense of humour that makes long days easier. Let’s make something that stands out.</p>
+          </div>
+          <div data-l="de" lang="de">
+            <p>Design treibt mich seit meinem ersten Tag im Studium an. Am meisten reizt es mich, komplexe Botschaften in einfache, starke visuelle Ideen zu übersetzen.</p>
+            <p>Meine Karriere begann bei FCB Health Reaktor (IPG Group) in Istanbul, wo ich innerhalb eines Jahres vom Grafikdesigner zum Junior Art Director wurde. Die Arbeit für globale Marken wie Pfizer, Roche und Bayer hat mich gelehrt, 360°-Kampagnen zu entwickeln, die überzeugen und ihre KPIs erreichen. Meine Vorgesetzten nannten mich den schnellsten Lerner, mit dem sie je gearbeitet hatten: jemand, der auch unter Druck ruhig bleibt und liefert.</p>
+            <h2>Von Istanbul nach Berlin</h2>
+            <p>2023 bin ich für meinen Master in Integrated Design an der Hochschule Anhalt nach Deutschland gezogen, um mein Handwerk um einen ganzheitlichen, interdisziplinären Ansatz zu erweitern. Heute lebe ich in Berlin und arbeite auf Deutsch auf C1-Niveau.</p>
+            <h2>Warum mit mir arbeiten?</h2>
+            <p>Sie bekommen einen schnellen Lerner mit der Verlässlichkeit eines agenturerfahrenen Art Directors und einer Portion Humor, die lange Tage leichter macht. Lassen Sie uns etwas schaffen, das auffällt.</p>
+          </div>
+        </div>
+        <div class="cv">
+          <div>
+            <h2><span data-l="en">Experience</span><span data-l="de">Berufserfahrung</span></h2>
+            <ol>
+              <li><span class="when">10.2022 – 09.2023</span><strong>Junior Art Director</strong><span>FCB Health Reaktor, Istanbul</span></li>
+              <li><span class="when">10.2021 – 09.2022</span><strong><span data-l="en">Graphic Designer</span><span data-l="de">Grafikdesigner</span></strong><span>FCB Health Reaktor, Istanbul</span></li>
+            </ol>
+          </div>
+          <div>
+            <h2><span data-l="en">Education</span><span data-l="de">Ausbildung</span></h2>
+            <ol>
+              <li><span class="when">2023 – 2025</span><strong>M.A. Integrated Design</strong><span>Hochschule Anhalt, Dessau</span></li>
+              <li><span class="when">2014 – 2021</span><strong>B.A. Industrial Design</strong><span><span data-l="en">Bahçeşehir University, Istanbul</span><span data-l="de">Bahçeşehir Universität, Istanbul</span></span></li>
+            </ol>
+          </div>
+          <div>
+            <h2><span data-l="en">Toolkit</span><span data-l="de">Werkzeugkasten</span></h2>
+            <ul>
+              <li><strong><span data-l="en">Visual strategy &amp; branding</span><span data-l="de">Visuelle Strategie &amp; Branding</span></strong><span data-l="en">Consistent brand identities, built from the ground up</span><span data-l="de">Konsistente Markenidentitäten von Grund auf</span></li>
+              <li><strong>Art Direction</strong><span data-l="en">From the first copy-and-art brainstorm to final production</span><span data-l="de">Vom ersten Text-Art-Brainstorming bis zur finalen Produktion</span></li>
+              <li><strong>3D &amp; Motion</strong><span data-l="en">Blender and After Effects for depth and movement</span><span data-l="de">Blender und After Effects für Tiefe und Bewegung</span></li>
+              <li><strong><span data-l="en">Software</span><span data-l="de">Software</span></strong><span>Photoshop, Illustrator, InDesign, Figma, After Effects, Premiere Pro, Blender, Midjourney</span></li>
+            </ul>
+          </div>
+          <div>
+            <h2><span data-l="en">Languages</span><span data-l="de">Sprachen</span></h2>
+            <ul>
+              <li><strong><span data-l="en">Turkish</span><span data-l="de">Türkisch</span></strong><span class="when"><span data-l="en">Native</span><span data-l="de">Muttersprache</span></span></li>
+              <li><strong><span data-l="en">German</span><span data-l="de">Deutsch</span></strong><span class="when">C1</span></li>
+              <li><strong><span data-l="en">English</span><span data-l="de">Englisch</span></strong><span class="when">C1</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<!-- ============ CONTACT ============ -->
+  <section data-view="contact" hidden>
+    <div class="contact">
+      <h1><span data-l="en">Based in Berlin-Schöneberg.<br>Let’s get in touch.</span><span data-l="de">Ich lebe in Berlin-Schöneberg.<br>Nehmen Sie gern Kontakt mit mir auf!</span></h1>
+      <ul class="links">
+        <li>
+          <svg viewBox="0 0 30 22" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="1" y="1" width="28" height="20" rx="1"/><path d="M1 1l14 11L29 1M1 21l10-10M29 21L19 11"/></svg>
+          <span><a class="mail" id="mail" href="mailto:ahmetcanersoy@gmail.com">ahmetcanersoy@gmail.com</a><button type="button" class="copy" id="copy"><span data-l="en">Copy</span><span data-l="de">Kopieren</span></button></span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5zM3 9.75h4V21H3zM9.5 9.75h3.83v1.54h.06c.53-1 1.84-2.06 3.79-2.06 4.05 0 4.8 2.67 4.8 6.13V21h-4v-4.98c0-1.19-.02-2.72-1.66-2.72-1.66 0-1.92 1.3-1.92 2.63V21h-4z"/></svg>
+          <a href="https://www.linkedin.com/in/canersoy-design" target="_blank" rel="noopener">www.linkedin.com/in/canersoy-design</a>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2.5" y="2.5" width="19" height="19" rx="5.5"/><circle cx="12" cy="12" r="4.3"/><circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none"/></svg>
+          <a href="https://www.instagram.com/a.canersoyy" target="_blank" rel="noopener">www.instagram.com/a.canersoyy</a>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ HERCEPTIN ============ -->
+  <article data-view="herceptin" hidden>
+    <div class="wrap">
+      <div class="p-head">
+        <a class="back" href="#works"><span data-l="en">← All works</span><span data-l="de">← Alle Arbeiten</span></a>
+        <h1><span data-l="en">20 Years of Not Giving Up on Dreams</span><span data-l="de" lang="de">Seit 20 Jahren träumen wir weiter</span></h1>
+        <p class="sub"><span data-l="en">Herceptin social awareness campaign</span><span data-l="de">Social-Awareness-Kampagne für Herceptin</span></p>
+        <dl class="facts">
+          <div><dt class="label"><span data-l="en">Client</span><span data-l="de">Kunde</span></dt><dd>Roche (FCB Health Reaktor)</dd></div>
+          <div><dt class="label"><span data-l="en">Role</span><span data-l="de">Rolle</span></dt><dd><span data-l="en">Concept &amp; art direction</span><span data-l="de">Konzept &amp; Art Direction</span></dd></div>
+          <div><dt class="label"><span data-l="en">Year</span><span data-l="de">Jahr</span></dt><dd>2023</dd></div>
+          <div><dt class="label"><span data-l="en">Typefaces</span><span data-l="de">Schriften</span></dt><dd>Amaranth, Akzidenz-Grotesk Next</dd></div>
+        </dl>
+      </div>
+      <figure class="full"><img class="zoom" src="images/herceptin-cover.jpg" alt="Campaign wrapped on a tram in purple and orange" width="1600" height="900"></figure>
+
+      <div class="text-block">
+        <div class="k"><h3><span data-l="en">Concept</span><span data-l="de">Konzept</span></h3></div>
+        <div class="v" data-l="en">
+          <p class="lead">A campaign that celebrates resilience without medical clichés.</p>
+          <p>The concept shows the emotional phases of the cancer journey through abstraction. Instead of clinical narratives, the campaign uses emotional storytelling: faces, moments of quiet and hope, framed by the bold “20” mark.</p>
+        </div>
+        <div class="v" data-l="de" lang="de">
+          <p class="lead">Eine Kampagne, die Stärke feiert, ohne medizinische Klischees.</p>
+          <p>Das Konzept zeigt die emotionalen Phasen einer Krebserkrankung durch Abstraktion. Statt klinischer Narrative setzt die Kampagne auf emotionales Storytelling: Gesichter, Momente der Ruhe und Hoffnung, gerahmt von der markanten „20“.</p>
+        </div>
+      </div>
+
+      <div class="slogan">
+        <q lang="tr"><span>20 yıldır</span> hayal kurmaktan vazgeçmedik</q>
+        <p><span data-l="en">For 20 years, we haven’t given up on dreaming.</span><span data-l="de">Seit 20 Jahren haben wir nicht aufgehört zu träumen.</span></p>
+      </div>
+
+      <div class="grid2">
+        <img class="zoom" src="images/herceptin-logo.jpg" alt="Campaign logo: 20 yıldır Hayal Kurmaktan Vazgeçmedik" loading="lazy" width="1600" height="900">
+        <img class="zoom" src="images/herceptin-logo-anatomy.jpg" alt="Logo anatomy with English translation of each part" loading="lazy" width="1600" height="900">
+      </div>
+      <figure class="full"><img class="zoom" src="images/herceptin-poster-1.jpg" alt="Key visual: smiling woman with tears, eyes closed" loading="lazy" width="1600" height="900"></figure>
+      <div class="grid2">
+        <img class="zoom" src="images/herceptin-poster-2.jpg" alt="Key visual: woman in a headscarf looking out of a window" loading="lazy" width="1600" height="900">
+        <img class="zoom" src="images/herceptin-poster-3.jpg" alt="Key visual: man embracing a woman, both with eyes closed" loading="lazy" width="1600" height="900">
+      </div>
+      <figure class="full"><img class="zoom" src="images/herceptin-stage.jpg" alt="Campaign visual on a large event stage screen" loading="lazy" width="1600" height="900"></figure>
+      <div class="split">
+        <img class="zoom" src="images/herceptin-busstop.jpg" alt="Campaign poster in a bus shelter at dusk" loading="lazy" width="966" height="772">
+        <img class="zoom" src="images/herceptin-merch.jpg" alt="Event lanyard, badge and stickers on a laptop" loading="lazy" width="1600" height="900">
+      </div>
+      <figure class="full"><img class="zoom" src="images/herceptin-billboard.jpg" alt="Row of campaign posters on a street facade" loading="lazy" width="1600" height="900"></figure>
+
+      <a class="next" href="#purenest"><div><span class="label"><span data-l="en">Next project</span><span data-l="de">Nächstes Projekt</span></span><strong>Purenest</strong></div><span class="arrow" aria-hidden="true">→</span></a>
+    </div>
+  </article>
+
+  <!-- ============ PURENEST ============ -->
+  <article data-view="purenest" hidden>
+    <div class="wrap">
+      <div class="p-head">
+        <a class="back" href="#works"><span data-l="en">← All works</span><span data-l="de">← Alle Arbeiten</span></a>
+        <h1><span data-l="en">Purenest Brand &amp; E&#8209;commerce System</span><span data-l="de" lang="de">Purenest Marken- &amp; E&#8209;Commerce-System</span></h1>
+        <p class="sub"><span data-l="en">Brand identity, B2B website and communication design</span><span data-l="de">Markenidentität, B2B-Website und Kommunikationsdesign</span></p>
+        <dl class="facts">
+          <div><dt class="label"><span data-l="en">Client</span><span data-l="de">Kunde</span></dt><dd><span data-l="en">Purenest, organic baby wholesale</span><span data-l="de">Purenest, Bio-Babyartikel im Großhandel</span></dd></div>
+          <div><dt class="label"><span data-l="en">Role</span><span data-l="de">Rolle</span></dt><dd><span data-l="en">Concept, brand design, website design</span><span data-l="de">Konzept, Markendesign, Webdesign</span></dd></div>
+          <div><dt class="label"><span data-l="en">Year</span><span data-l="de">Jahr</span></dt><dd>2024 · Freelance</dd></div>
+          <div><dt class="label"><span data-l="en">Deliverables</span><span data-l="de">Leistungen</span></dt><dd><span data-l="en">Logo, colour &amp; type, packaging, web, social</span><span data-l="de">Logo, Farbe &amp; Typografie, Verpackung, Web, Social Media</span></dd></div>
+        </dl>
+      </div>
+      <figure class="full"><img class="zoom" src="images/purenest-cover.jpg" alt="Purenest website on desktop, laptop, tablet and phone" width="1600" height="900"></figure>
+
+      <div class="split">
+        <div>
+          <span class="label">Brief</span>
+          <div data-l="en">
+            <p class="brief">A freelance branding and e-commerce project for a wholesale platform that sells organic baby products to retailers.</p>
+            <p>The goal was a clear and trustworthy brand system that communicates care, quality and reliability across every digital touchpoint.</p>
+          </div>
+          <div data-l="de" lang="de">
+            <p class="brief">Ein Freelance-Projekt für Branding und E-Commerce einer Großhandelsplattform, die Händler mit Bio-Babyprodukten beliefert.</p>
+            <p>Ziel war ein klares, vertrauenswürdiges Markensystem, das Fürsorge, Qualität und Verlässlichkeit über alle digitalen Touchpoints vermittelt.</p>
+          </div>
+        </div>
+        <img class="zoom" src="images/purenest-sign.jpg" alt="Purenest logo on a hanging shop sign" loading="lazy" width="1200" height="994">
+      </div>
+
+      <div class="text-block">
+        <div class="k"><h3><span data-l="en">Logo idea</span><span data-l="de">Logo-Idee</span></h3></div>
+        <div class="v">
+          <p class="lead" data-l="en">Mother + baby + cotton. Two continuous lines form a mother holding her child, set against a soft cotton-boll shape.</p>
+          <p class="lead" data-l="de" lang="de">Mutter + Baby + Baumwolle. Zwei durchgehende Linien formen eine Mutter mit ihrem Kind, vor einer weichen Baumwollkapsel.</p>
+        </div>
+      </div>
+      <figure class="full"><img class="zoom" src="images/purenest-logo-construction.jpg" alt="Logo construction: mother, baby and cotton shapes combine into the mark" loading="lazy" width="1600" height="900"></figure>
+
+      <div class="text-block" style="padding-bottom:16px">
+        <div class="k"><h3><span data-l="en">Colour &amp; type</span><span data-l="de">Farbe &amp; Schrift</span></h3></div>
+        <div class="v">
+          <p data-l="en">A calm, soft palette led by deep teal, with blue, sage and blush as supporting colours. Blanket sets the friendly headlines, Amaranth carries the text.</p>
+          <p data-l="de" lang="de">Eine ruhige, sanfte Palette mit tiefem Petrol als Leitfarbe, ergänzt durch Blau, Salbei und Rosé. Blanket setzt die freundlichen Headlines, Amaranth trägt den Text.</p>
+        </div>
+      </div>
+      <div class="swatches">
+        <div class="swatch"><i style="background:#003b4a"></i><b>#003B4A</b><small>RGB 0 59 74</small></div>
+        <div class="swatch"><i style="background:#5f99af"></i><b>#5F99AF</b><small>RGB 95 153 175</small></div>
+        <div class="swatch"><i style="background:#cedfd7"></i><b>#CEDFD7</b><small>RGB 206 223 215</small></div>
+        <div class="swatch"><i style="background:#e2c4c6"></i><b>#E2C4C6</b><small>RGB 226 196 198</small></div>
+      </div>
+      <figure class="full"><img class="zoom" src="images/purenest-colors.jpg" alt="Colour palette and typefaces Blanket and Amaranth" loading="lazy" width="1600" height="900"></figure>
+      <figure class="full"><img class="zoom" src="images/purenest-packaging.jpg" alt="Shipping box, hang tag, tote bag and tape with Purenest branding" loading="lazy" width="1600" height="900"></figure>
+      <figure class="full"><img class="zoom" src="images/purenest-windows.jpg" alt="Four shop windows with Purenest cotton graphics in brand colours" loading="lazy" width="1600" height="900"></figure>
+      <figure class="full"><img class="zoom" src="images/purenest-social.jpg" alt="Instagram profile, post and story designs" loading="lazy" width="1600" height="900"></figure>
+
+      <div class="text-block">
+        <div class="k"><h3>Website</h3></div>
+        <div class="v">
+          <p data-l="en">A B2B shop where retailers sign up to see wholesale prices. A custom icon set, product cards with sample and bulk quantities, a branded 404 page and a clear category footer.</p>
+          <p data-l="de" lang="de">Ein B2B-Shop, in dem Händler sich registrieren, um Großhandelspreise zu sehen. Mit eigenem Icon-Set, Produktkarten für Muster- und Großmengen, einer gebrandeten 404-Seite und einem klaren Kategorie-Footer.</p>
+        </div>
+      </div>
+      <figure class="full"><img class="zoom" src="images/purenest-icons.jpg" alt="Custom icon set next to the website on a laptop" loading="lazy" width="1600" height="900"></figure>
+      <figure class="full"><img class="zoom" src="images/purenest-web-home.jpg" alt="Website home page, 404 page and product listing" loading="lazy" width="1600" height="900"></figure>
+      <figure class="full"><img class="zoom" src="images/purenest-web-products.jpg" alt="Product cards, footer and tablet login screen" loading="lazy" width="1600" height="900"></figure>
+
+      <a class="next" href="#lines-of-arrival"><div><span class="label"><span data-l="en">Next project</span><span data-l="de">Nächstes Projekt</span></span><strong>Lines of Arrival</strong></div><span class="arrow" aria-hidden="true">→</span></a>
+    </div>
+  </article>
+
+  <!-- ============ LINES OF ARRIVAL ============ -->
+  <article data-view="lines-of-arrival" hidden>
+    <div class="wrap">
+      <div class="p-head">
+        <a class="back" href="#works"><span data-l="en">← All works</span><span data-l="de">← Alle Arbeiten</span></a>
+        <h1>Lines of Arrival</h1>
+        <p class="sub"><span data-l="en">Contemplative photography booklet: unpredictable pathways</span><span data-l="de">Kontemplatives Fotobuch: unvorhersehbare Wege</span></p>
+        <dl class="facts">
+          <div><dt class="label"><span data-l="en">Context</span><span data-l="de">Kontext</span></dt><dd>M.A. Integrated Design, Hochschule Anhalt</dd></div>
+          <div><dt class="label">Semester</dt><dd><span data-l="en">Summer 2024 · one week</span><span data-l="de">Sommersemester 2024 · eine Woche</span></dd></div>
+          <div><dt class="label"><span data-l="en">Role</span><span data-l="de">Rolle</span></dt><dd><span data-l="en">Concept, photography, editorial layout</span><span data-l="de">Konzept, Fotografie, Editorial-Layout</span></dd></div>
+          <div><dt class="label"><span data-l="en">Lecturer</span><span data-l="de">Dozent</span></dt><dd>Alberto Iberbuden</dd></div>
+        </dl>
+      </div>
+      <figure class="full"><img class="zoom" src="images/booklet-cover.jpg" alt="Ultramarine booklet cover titled lines of arrival, unpredictable pathways" width="1600" height="900"></figure>
+
+      <div class="text-block">
+        <div class="k"><h3><span data-l="en">Idea</span><span data-l="de">Idee</span></h3></div>
+        <div class="v" data-l="en">
+          <p class="lead">How can slow observation turn attention toward the small details we overlook every day?</p>
+          <p>Rather than telling a story, the booklet asks the reader to pause and engage with images through sequence, spacing and repetition. Paths, shortcuts and entrances recur. Each door carries a number: the same system every time, yet a different shape, material and typeface.</p>
+        </div>
+        <div class="v" data-l="de" lang="de">
+          <p class="lead">Wie kann langsames Beobachten den Blick auf die kleinen Details lenken, die wir täglich übersehen?</p>
+          <p>Statt eine Geschichte zu erzählen, lädt das Heft dazu ein, innezuhalten und sich über Abfolge, Abstand und Wiederholung auf die Bilder einzulassen. Wege, Abkürzungen und Eingänge kehren wieder. Jede Tür trägt eine Hausnummer: immer dasselbe System, doch jedes Mal in anderer Form, anderem Material und anderer Schrift.</p>
+        </div>
+      </div>
+
+      <div class="cols">
+        <div>
+          <h3><span data-l="en">Visual language</span><span data-l="de">Bildsprache</span></h3>
+          <p data-l="en">The editorial design is about restraint and pacing. Typography and layout create moments of pause and let the photographs lead the reading, without visual distraction.</p>
+          <p data-l="de" lang="de">Das Editorial Design setzt auf Zurückhaltung und Rhythmus. Typografie und Layout schaffen Momente der Pause und lassen die Fotografien die Lektüre führen, ohne visuelle Ablenkung.</p>
+        </div>
+        <div>
+          <h3><span data-l="en">Execution</span><span data-l="de">Umsetzung</span></h3>
+          <p data-l="en">All photographs were shot by me and curated into a printed booklet. The layout is a simple editorial system that balances image density and white space for a slow viewing rhythm.</p>
+          <p data-l="de" lang="de">Alle Fotos habe ich selbst aufgenommen und zu einem gedruckten Heft kuratiert. Das Layout folgt einem einfachen Editorial-System, das Bilddichte und Weißraum für einen langsamen Lesefluss ausbalanciert.</p>
+        </div>
+        <div>
+          <h3><span data-l="en">Printing</span><span data-l="de">Druck</span></h3>
+          <p data-l="en">Printing Department of Hochschule Anhalt, Dessau.</p>
+          <p data-l="de" lang="de">Druckerei der Hochschule Anhalt, Dessau.</p>
+        </div>
+      </div>
+
+      <div class="grid2">
+        <img class="zoom" src="images/booklet-mockup-quote.jpg" alt="Open booklet on the Shunryu Suzuki quote spread" loading="lazy" width="1600" height="900">
+        <img class="zoom" src="images/booklet-mockup-colophon.jpg" alt="Open booklet on the colophon spread" loading="lazy" width="1600" height="900">
+      </div>
+      <figure class="full"><img class="zoom" src="images/booklet-spread-01.jpg" alt="Spread: intro text" loading="lazy" width="1298" height="918"><figcaption>Intro, <span data-l="en">p.</span><span data-l="de">S.</span> 1</figcaption></figure>
+      <div class="grid2">
+        <figure><img class="zoom" src="images/booklet-spread-02.jpg" alt="Spread: two forest paths" loading="lazy" width="1298" height="918"><figcaption><span data-l="en">pp.</span><span data-l="de">S.</span> 2–3</figcaption></figure>
+        <figure><img class="zoom" src="images/booklet-spread-03.jpg" alt="Spread: door number 1 and forking gravel paths" loading="lazy" width="1298" height="918"><figcaption><span data-l="en">pp.</span><span data-l="de">S.</span> 4–5</figcaption></figure>
+        <figure><img class="zoom" src="images/booklet-spread-04.jpg" alt="Spread: meadow path, entrance number 2 and a fenced street" loading="lazy" width="1298" height="918"><figcaption><span data-l="en">pp.</span><span data-l="de">S.</span> 6–7</figcaption></figure>
+        <figure><img class="zoom" src="images/booklet-spread-05.jpg" alt="Spread: archway and pink facade behind barriers" loading="lazy" width="1298" height="918"><figcaption><span data-l="en">pp.</span><span data-l="de">S.</span> 8–9</figcaption></figure>
+      </div>
+      <figure class="full"><img class="zoom" src="images/booklet-spread-06.jpg" alt="Spread: quote by Shunryu Suzuki on ultramarine" loading="lazy" width="1300" height="920"><figcaption><span data-l="en">pp.</span><span data-l="de">S.</span> 10–11</figcaption></figure>
+      <div class="grid2">
+        <figure><img class="zoom" src="images/booklet-spread-07.jpg" alt="Spread: temporary ramp and a park path" loading="lazy" width="1298" height="918"><figcaption><span data-l="en">pp.</span><span data-l="de">S.</span> 12–13</figcaption></figure>
+        <figure><img class="zoom" src="images/booklet-spread-08.jpg" alt="Spread: curved path with railing and door number 19" loading="lazy" width="1298" height="918"><figcaption><span data-l="en">pp.</span><span data-l="de">S.</span> 14–15</figcaption></figure>
+        <figure><img class="zoom" src="images/booklet-spread-09.jpg" alt="Spread: orange entrance number 81 and Conceptual Reflection text" loading="lazy" width="1298" height="918"><figcaption><span data-l="en">pp.</span><span data-l="de">S.</span> 16–17</figcaption></figure>
+        <figure><img class="zoom" src="images/booklet-spread-10.jpg" alt="Spread: entrance number 55 and a desire path" loading="lazy" width="1298" height="918"><figcaption><span data-l="en">pp.</span><span data-l="de">S.</span> 18–19</figcaption></figure>
+      </div>
+      <figure class="full"><img class="zoom" src="images/booklet-spread-11.jpg" alt="Spread: arcade corridor and colophon" loading="lazy" width="1298" height="918"><figcaption><span data-l="en">pp.</span><span data-l="de">S.</span> 20–21</figcaption></figure>
+
+      <a class="next" href="#herceptin"><div><span class="label"><span data-l="en">Next project</span><span data-l="de">Nächstes Projekt</span></span><strong><span data-l="en">Herceptin campaign</span><span data-l="de">Herceptin-Kampagne</span></strong></div><span class="arrow" aria-hidden="true">→</span></a>
+    </div>
+  </article>
+</main>
+
+<nav class="bottomnav" aria-label="Main">
+  <a href="#works" data-route="works"><span data-l="en">Works</span><span data-l="de">Arbeiten</span></a>
+  <a href="#about" data-route="about"><span data-l="en">About</span><span data-l="de">Über mich</span></a>
+  <a href="#contact" data-route="contact"><span data-l="en">Contact</span><span data-l="de">Kontakt</span></a>
+  <a href="#" class="nav-lang" data-toggle-lang><span data-l="en">DE</span><span data-l="de">EN</span></a>
+</nav>
+
+<div class="menu" id="menu" hidden role="dialog" aria-modal="true" aria-label="Menu">
+  <nav>
+    <a href="#works" data-route="works"><span data-l="en">Works</span><span data-l="de">Arbeiten</span></a>
+    <a href="#about" data-route="about"><span data-l="en">About me</span><span data-l="de">Über mich</span></a>
+    <a href="#contact" data-route="contact"><span data-l="en">Contact</span><span data-l="de">Kontakt</span></a>
+    <a href="#" data-toggle-lang><span data-l="en">DE</span><span data-l="de">EN</span></a>
+  </nav>
+  <button type="button" class="menu-close" id="menu-close"><span data-l="en">Close ✕</span><span data-l="de">Schließen ✕</span></button>
+  <div class="menu-name"><strong>Can<br>Ersoy</strong><span data-l="en">Berlin based Art director<br>&amp; Brand designer</span><span data-l="de">Art Director &amp; Brand Designer<br>aus Berlin</span></div>
+</div>
+
+<div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="Image">
+  <img id="lb-img" alt="">
+  <button type="button" id="lb-close"><span data-l="en">Close ✕</span><span data-l="de">Schließen ✕</span></button>
+</div>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  var views = Array.prototype.slice.call(document.querySelectorAll('main > [data-view]'));
+  var names = views.map(function (v) { return v.getAttribute('data-view'); });
+  var titles = {
+    en: { home: 'Can Ersoy – Art Director & Brand Designer, Berlin', works: 'Works – Can Ersoy', about: 'About – Can Ersoy', contact: 'Contact – Can Ersoy',
+          herceptin: 'Social Awareness Campaign – Can Ersoy', purenest: 'Purenest – Can Ersoy', 'lines-of-arrival': 'Lines of Arrival – Can Ersoy' },
+    de: { home: 'Can Ersoy – Art Director & Brand Designer, Berlin', works: 'Arbeiten – Can Ersoy', about: 'Über mich – Can Ersoy', contact: 'Kontakt – Can Ersoy',
+          herceptin: 'Social-Awareness-Kampagne – Can Ersoy', purenest: 'Purenest – Can Ersoy', 'lines-of-arrival': 'Lines of Arrival – Can Ersoy' }
+  };
+
+  function parse() {
+    var h = (location.hash || '').replace(/^#/, '');
+    var m = /^de(?:-(.*))?$/.exec(h);
+    return m ? { lang: 'de', view: m[1] || 'home' } : { lang: null, view: h || 'home' };
+  }
+  function savedLang() {
+    try { var l = localStorage.getItem('lang'); if (l === 'de' || l === 'en') return l; } catch (e) {}
+    return null;
+  }
+  var p0 = parse();
+  var lang = p0.lang || savedLang() || ((navigator.language || '').toLowerCase().indexOf('de') === 0 ? 'de' : 'en');
+  var current = 'home';
+
+  function hashFor(view) {
+    if (lang === 'de') return '#de' + (view === 'home' ? '' : '-' + view);
+    return view === 'home' ? '#' : '#' + view;
+  }
+  function setLang(l) {
+    lang = l; root.setAttribute('data-lang', l); root.lang = l;
+    try { localStorage.setItem('lang', l); } catch (e) {}
+    document.title = (titles[lang][current]) || titles[lang].home;
+    // rewrite hrefs so links carry the language
+    document.querySelectorAll('a[href^="#"]:not([data-toggle-lang])').forEach(function (a) {
+      var v = a.getAttribute('data-route') || a.getAttribute('href').replace(/^#(de-?)?/, '') || 'home';
+      a.setAttribute('data-route', v);
+      a.setAttribute('href', hashFor(v));
+    });
+  }
+  function route() {
+    var p = parse();
+    if (p.lang && p.lang !== lang) setLang(p.lang);
+    var name = names.indexOf(p.view) > -1 ? p.view : 'home';
+    current = name;
+    views.forEach(function (v) { v.hidden = v.getAttribute('data-view') !== name; });
+    document.body.setAttribute('data-view', name);
+    document.querySelectorAll('.bottomnav [data-route], .menu [data-route]').forEach(function (a) {
+      var on = a.getAttribute('data-route') === name || (a.getAttribute('data-route') === 'works' && ['herceptin', 'purenest', 'lines-of-arrival'].indexOf(name) > -1);
+      if (on) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
+    });
+    document.title = titles[lang][name] || titles[lang].home;
+    closeMenu();
+    window.scrollTo(0, 0);
+  }
+
+  // language toggles
+  document.addEventListener('click', function (e) {
+    var t = e.target.closest('[data-toggle-lang]');
+    if (!t) return;
+    e.preventDefault();
+    setLang(lang === 'de' ? 'en' : 'de');
+    var target = hashFor(current);
+    if (location.hash !== target && !(target === '#' && !location.hash)) location.hash = target;
+  });
+
+  // mobile menu
+  var menu = document.getElementById('menu'), openBtn = document.getElementById('menu-open');
+  function closeMenu() { if (!menu.hidden) { menu.hidden = true; openBtn.setAttribute('aria-expanded', 'false'); document.body.style.overflow = ''; } }
+  openBtn.addEventListener('click', function () { menu.hidden = false; openBtn.setAttribute('aria-expanded', 'true'); document.body.style.overflow = 'hidden'; document.getElementById('menu-close').focus(); });
+  document.getElementById('menu-close').addEventListener('click', closeMenu);
+  menu.addEventListener('click', function (e) { if (e.target.closest('a[data-route]')) closeMenu(); });
+
+  // lightbox
+  var lb = document.getElementById('lb'), lbImg = document.getElementById('lb-img');
+  document.addEventListener('click', function (e) {
+    var t = e.target;
+    if (t.classList && t.classList.contains('zoom')) { lbImg.src = t.currentSrc || t.src; lbImg.alt = t.alt; lb.hidden = false; }
+    else if (!lb.hidden && lb.contains(t)) { lb.hidden = true; }
+  });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { lb.hidden = true; closeMenu(); } });
+
+  // copy email
+  var copy = document.getElementById('copy'), mail = document.getElementById('mail');
+  copy.addEventListener('click', function () {
+    function done() { copy.innerHTML = lang === 'de' ? 'Kopiert' : 'Copied'; setTimeout(function () { copy.innerHTML = '<span data-l="en">Copy</span><span data-l="de">Kopieren</span>'; }, 1800); }
+    function fallback() { var r = document.createRange(); r.selectNodeContents(mail); var s = getSelection(); s.removeAllRanges(); s.addRange(r); }
+    try { navigator.clipboard.writeText(mail.textContent).then(done, fallback); } catch (err) { fallback(); }
+  });
+
+  setLang(lang);
+  window.addEventListener('hashchange', route);
+  route();
+})();
+</script>
+
+</body>
+</html>
